@@ -9,7 +9,7 @@ interface User {
 
 interface AuthState {
   token: string | null
-  user: User | null
+  user: any | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
 }
@@ -24,11 +24,13 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({ token, user })
 
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+    localStorage.setItem("token", token)
+    localStorage.setItem("user", JSON.stringify(user))
   },
 
   logout: () => {
     set({ token: null, user: null })
-    delete api.defaults.headers.common["Authorization"]
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
   },
 }))

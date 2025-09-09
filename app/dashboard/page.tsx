@@ -1,5 +1,22 @@
-const Dashboard = () => {
-  return <h1>Dashboard.</h1>
-}
+"use client"
 
-export default Dashboard
+import { useAuth } from "@/hooks/useAuth"
+
+export default function DashboardPage() {
+  const { authenticated, loading } = useAuth()
+
+  if (loading) {
+    return <p>Carregando...</p>
+  }
+
+  if (!authenticated) {
+    return null
+  }
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <p>Bem-vindo! 🎉</p>
+    </div>
+  )
+}
