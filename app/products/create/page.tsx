@@ -12,6 +12,7 @@ import { useToastStore } from "@/stores/toastStore"
 import { ArrowLeft } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
+import { Loading } from "@/components/Loading"
 
 type ProductFormData = {
   title: string
@@ -55,7 +56,7 @@ export default function CreateProductPage() {
     }
   }
 
-  if (loading || !authenticated) return <p>Carregando...</p>
+  if (loading || !authenticated) return <Loading />
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md ">

@@ -10,6 +10,7 @@ import { ArrowLeft } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
 import { useToastStore } from "@/stores/toastStore"
+import { Loading } from "@/components/Loading"
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -19,7 +20,6 @@ export default function ProductDetailPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState("")
   const { addToast } = useToastStore()
-  
 
   const { authenticated, loading: authLoading } = useAuth()
   const user = useAuthStore((state) => state.user)
@@ -46,8 +46,7 @@ export default function ProductDetailPage() {
     if (id && authenticated) fetchProduct()
   }, [id, authenticated])
 
-  if (loading || authLoading || !authenticated)
-    return <p className="p-6">Carregando...</p>
+  if (loading || authLoading || !authenticated) return <Loading />
   if (error) return <p className="p-6 text-red-500">{error}</p>
   if (!product)
     return <p className="p-6 text-red-500">Produto não encontrado</p>

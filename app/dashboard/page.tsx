@@ -3,12 +3,14 @@
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
 import DashboardChart from "@/app/dashboard/components/DashboardChart"
+import { Loading } from "@/components/Loading"
 
 export default function DashboardPage() {
   const { authenticated, loading } = useAuth()
   const user = useAuthStore((state) => state.user)
 
-  if (loading) return <p>Carregando...</p>
+  if (loading) return <Loading />
+
   if (!authenticated) return null
 
   return (

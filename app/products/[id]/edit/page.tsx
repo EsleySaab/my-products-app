@@ -12,6 +12,7 @@ import { useToastStore } from "@/stores/toastStore"
 import api from "@/lib/api"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
+import { Loading } from "@/components/Loading"
 
 type ProductFormData = {
   title?: string
@@ -93,7 +94,7 @@ export default function EditProductPage() {
     }
   }
 
-  if (loading || authLoading || !authenticated) return <p>Carregando...</p>
+  if (loading || authLoading || !authenticated) return <Loading />
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-gray-50 dark:bg-gray-950 h-full">

@@ -7,6 +7,7 @@ import { useToastStore } from "@/stores/toastStore"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
 import { ProductCard } from "./components/ProductCard"
+import { Loading } from "@/components/Loading"
 
 export default function ProductsPage() {
   const { authenticated, loading } = useAuth()
@@ -32,7 +33,7 @@ export default function ProductsPage() {
     addToast("Produto deletado com sucesso!", "danger")
   }
 
-  if (loading || !authenticated) return <p>Carregando...</p>
+  if (loading || !authenticated) return <Loading />
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-950 h-full">
