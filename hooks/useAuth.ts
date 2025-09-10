@@ -4,7 +4,15 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import api from "@/lib/api"
 
-export function useAuth(redirectTo: string = "/login") {
+interface UseAuthProps {
+  redirectTo?: string
+  requireAuth?: boolean
+}
+
+export function useAuth({
+  redirectTo = "/login",
+  requireAuth = true,
+}: UseAuthProps = {}) {
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
   const [user, setUser] = useState<any>(null)
@@ -15,7 +23,7 @@ export function useAuth(redirectTo: string = "/login") {
       const token = localStorage.getItem("token")
 
       if (!token) {
-        router.replace(redirectTo)
+        if (requireAuth) router.replace(redirectTo)
         setLoading(false)
         return
       }
@@ -24,9 +32,7 @@ export function useAuth(redirectTo: string = "/login") {
         const response = await api.post(
           "/auth/session",
           {},
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         )
 
         const { token: newToken, user: sessionUser } = response.data
@@ -39,14 +45,14 @@ export function useAuth(redirectTo: string = "/login") {
       } catch (err) {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
-        router.replace(redirectTo)
+        if (requireAuth) router.replace(redirectTo)
       } finally {
         setLoading(false)
       }
     }
 
     init()
-  }, [router, redirectTo])
+  }, [router, redirectTo, requireAuth])
 
   return { authenticated, loading, user }
 }

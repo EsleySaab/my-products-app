@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import api from "@/lib/api"
 import { registerSchema } from "@/utils/validation"
@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
 import { useToastStore } from "@/stores/toastStore"
+import { useAuth } from "@/hooks/useAuth"
+import { Loading } from "@/components/Loading"
+import NextLink from "next/link"
 
 type RegisterFormData = {
   name: string
@@ -24,8 +27,9 @@ type RegisterFormData = {
 
 export default function RegisterPage() {
   const router = useRouter()
+  const { authenticated, loading } = useAuth({ requireAuth: false })
   const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
+  const { addToast } = useToastStore()
 
   const {
     register,
@@ -35,17 +39,26 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   })
 
+  useEffect(() => {
+    if (!loading && authenticated) {
+      router.replace("/dashboard")
+    }
+  }, [authenticated, loading, router])
+
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await api.post("/users", data)
-      addToast("Usuário criado com sucesso! Você já pode fazer login.", "success")
+      addToast(
+        "Usuário criado com sucesso! Você já pode fazer login.",
+        "success"
+      )
       setTimeout(() => router.push("/login"), 1500)
     } catch (err: any) {
       setError(err.response?.data?.message || "Erro ao criar usuário")
     }
   }
 
-  const { addToast } = useToastStore()
+  if (loading) return <Loading />
 
   return (
     <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-950">
@@ -58,46 +71,43 @@ export default function RegisterPage() {
         </h1>
 
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        {success && (
-          <p className="text-green-500 mb-4 text-center">{success}</p>
-        )}
 
-        <Input label="Nome" {...register("name")} />
-        <div className="mt-4">
-          <Input label="Email" type="email" {...register("email")} />
-        </div>
+        <Input label="Nome" {...register("name")} className="mb-4" />
+        <Input
+          label="Email"
+          type="email"
+          {...register("email")}
+          className="mb-4"
+        />
+        <Input
+          label="Senha"
+          type="password"
+          {...register("password")}
+          className="mb-4"
+        />
+        <Input
+          label="Confirmar Senha"
+          type="password"
+          {...register("verifyPassword")}
+          className="mb-4"
+        />
+        <Input
+          label="País (ex: BR)"
+          {...register("phone.country")}
+          className="mb-4"
+        />
+        <Input label="DDD" {...register("phone.ddd")} className="mb-4" />
+        <Input label="Número" {...register("phone.number")} className="mb-6" />
 
-        <div className="mt-4">
-          <Input label="Senha" type="password" {...register("password")} />
-        </div>
-
-        <div className="mt-4">
-          <Input
-            label="Confirmar Senha"
-            type="password"
-            {...register("verifyPassword")}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Input label="País (ex: BR)" {...register("phone.country")} />
-        </div>
-        <div className="mt-4">
-          <Input label="DDD" {...register("phone.ddd")} />
-        </div>
-        <div className="mt-4">
-          <Input label="Número" {...register("phone.number")} />
-        </div>
-
-        <Button type="submit" className="w-full mt-6">
+        <Button type="submit" className="w-full mb-4">
           Registrar
         </Button>
 
-        <p className="mt-4 text-center text-gray-600 dark:text-gray-300">
+        <p className="mt-2 text-center text-gray-600 dark:text-gray-300">
           Já tem conta?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
+          <NextLink href="/login" className="text-blue-600 hover:underline">
             Faça login
-          </a>
+          </NextLink>
         </p>
       </form>
     </div>
