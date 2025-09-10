@@ -8,16 +8,29 @@ import { useRouter } from "next/navigation"
 import ConfirmDeleteModal from "@/components/confirmDeleteModal"
 import { useToastStore } from "@/stores/toastStore"
 import { Eye } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore"
 
 export default function ProductsPage() {
+  const { authenticated, loading } = useAuth()
+  const user = useAuthStore((state) => state.user)
   const { products, fetchProducts, deleteProduct } = useProductStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const router = useRouter()
+  const { addToast } = useToastStore()
 
   useEffect(() => {
-    fetchProducts()
-  }, [fetchProducts])
+    if (!loading && !authenticated) {
+      router.push("/login")
+    }
+  }, [authenticated, loading, router])
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchProducts()
+    }
+  }, [authenticated, fetchProducts])
 
   const handleOpenModal = (id: string) => {
     setSelectedId(id)
@@ -29,12 +42,11 @@ export default function ProductsPage() {
       await deleteProduct(selectedId)
       setIsModalOpen(false)
       setSelectedId(null)
-
       addToast("Produto deletado com sucesso!", "danger")
     }
   }
 
-  const { addToast } = useToastStore()
+  if (loading || !authenticated) return <p>Carregando...</p>
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-950 h-full">

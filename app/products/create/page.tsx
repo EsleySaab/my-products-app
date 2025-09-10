@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,6 +10,8 @@ import { useProductStore } from "@/stores/productStore"
 import { productSchema } from "@/utils/validation"
 import { useToastStore } from "@/stores/toastStore"
 import { ArrowLeft } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore"
 
 type ProductFormData = {
   title: string
@@ -21,6 +23,17 @@ export default function CreateProductPage() {
   const router = useRouter()
   const createProduct = useProductStore((state) => state.createProduct)
   const [error, setError] = useState("")
+  const { addToast } = useToastStore()
+
+  const { authenticated, loading } = useAuth()
+  const user = useAuthStore((state) => state.user)
+
+  // Protege a rota
+  useEffect(() => {
+    if (!loading && !authenticated) {
+      router.push("/login")
+    }
+  }, [authenticated, loading, router])
 
   const { register, handleSubmit, formState } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -43,7 +56,7 @@ export default function CreateProductPage() {
     }
   }
 
-  const { addToast } = useToastStore()
+  if (loading || !authenticated) return <p>Carregando...</p>
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md ">

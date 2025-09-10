@@ -10,6 +10,8 @@ import { ArrowLeft } from "lucide-react"
 import { updateProductSchema } from "@/utils/validation"
 import { useToastStore } from "@/stores/toastStore"
 import api from "@/lib/api"
+import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore"
 
 type ProductFormData = {
   title?: string
@@ -23,6 +25,18 @@ export default function EditProductPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+
+  const { addToast } = useToastStore()
+
+  const { authenticated, loading: authLoading } = useAuth()
+  const user = useAuthStore((state) => state.user)
+
+  // Protege a rota
+  useEffect(() => {
+    if (!authLoading && !authenticated) {
+      router.push("/login")
+    }
+  }, [authenticated, authLoading, router])
 
   const {
     register,
@@ -56,14 +70,8 @@ export default function EditProductPage() {
     try {
       const payload: any = {}
 
-      if (data.title) {
-        payload.title = data.title
-      }
-
-      if (data.description) {
-        payload.description = data.description
-      }
-
+      if (data.title) payload.title = data.title
+      if (data.description) payload.description = data.description
       payload.status = true
 
       if (Object.keys(payload).length > 0) {
@@ -77,17 +85,15 @@ export default function EditProductPage() {
           headers: { "Content-Type": "multipart/form-data" },
         })
       }
-      addToast("Produto atualizado com sucesso!", "info")
 
+      addToast("Produto atualizado com sucesso!", "info")
       router.push("/products")
     } catch (err: any) {
       setError("Erro ao atualizar produto")
     }
   }
 
-  const { addToast } = useToastStore()
-
-  if (loading) return <p>Carregando...</p>
+  if (loading || authLoading || !authenticated) return <p>Carregando...</p>
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-gray-50 dark:bg-gray-950 h-full">

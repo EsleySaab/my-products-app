@@ -6,6 +6,8 @@ import { Button } from "@heroui/button"
 import ConfirmDeleteModal from "@/components/confirmDeleteModal"
 import api from "@/lib/api"
 import { ArrowLeft } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore"
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -14,6 +16,16 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState("")
+
+  const { authenticated, loading: authLoading } = useAuth()
+  const user = useAuthStore((state) => state.user)
+
+  // Protege a rota
+  useEffect(() => {
+    if (!authLoading && !authenticated) {
+      router.push("/login")
+    }
+  }, [authenticated, authLoading, router])
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,10 +40,11 @@ export default function ProductDetailPage() {
       }
     }
 
-    if (id) fetchProduct()
-  }, [id])
+    if (id && authenticated) fetchProduct()
+  }, [id, authenticated])
 
-  if (loading) return <p className="p-6">Carregando...</p>
+  if (loading || authLoading || !authenticated)
+    return <p className="p-6">Carregando...</p>
   if (error) return <p className="p-6 text-red-500">{error}</p>
   if (!product)
     return <p className="p-6 text-red-500">Produto não encontrado</p>
@@ -85,7 +98,11 @@ export default function ProductDetailPage() {
               Editar
             </Button>
 
-            <Button onClick={handleOpenModal} color="danger" className="flex-1 p-1.5">
+            <Button
+              onClick={handleOpenModal}
+              color="danger"
+              className="flex-1 p-1.5"
+            >
               Deletar
             </Button>
           </div>
