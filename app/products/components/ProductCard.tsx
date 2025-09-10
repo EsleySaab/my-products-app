@@ -6,6 +6,7 @@ import { Eye } from "lucide-react"
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useToastStore } from "@/stores/toastStore"
 
 type ProductCardProps = {
   product: {
@@ -20,6 +21,7 @@ type ProductCardProps = {
 export function ProductCard({ product, onDelete }: ProductCardProps) {
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { addToast } = useToastStore()
 
   const handleOpenModal = () => setIsModalOpen(true)
 
@@ -40,7 +42,21 @@ export function ProductCard({ product, onDelete }: ProductCardProps) {
         </Avatar>
       )}
 
-      <h2 className="font-bold text-lg">{product.title}</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="font-bold text-lg">{product.title}</h2>
+
+        <Button
+          size="sm"
+          className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+          onClick={() => {
+            navigator.clipboard.writeText(product.id)
+            addToast("ID copiado!", "info")
+          }}
+        >
+          Copiar ID
+        </Button>
+      </div>
+
       <p className="text-gray-600 dark:text-gray-300">{product.description}</p>
 
       <div className="flex justify-between items-center mt-4">

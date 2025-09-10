@@ -14,7 +14,7 @@ import { Avatar, AvatarIcon } from "@heroui/avatar"
 import NextLink from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Search } from "lucide-react"
 
 export const Navbar = () => {
   const { token, logout } = useAuthStore()
@@ -66,14 +66,21 @@ export const Navbar = () => {
             justify="center"
             className="flex-1 max-w-md hidden sm:flex"
           >
-            <form onSubmit={handleSearch} className="w-full">
+            <form onSubmit={handleSearch} className="w-full flex gap-2">
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar produto por ID..."
                 radius="full"
-                className="w-full"
+                className="flex-1"
               />
+              <Button
+                type="submit"
+                size="sm"
+                className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white mt-1"
+              >
+                <Search size={16} />
+              </Button>
             </form>
           </NavbarContent>
         )}
@@ -154,7 +161,7 @@ export const Navbar = () => {
           justify="end"
           className="sm:hidden flex items-center gap-2"
         >
-          <ThemeSwitch /> 
+          <ThemeSwitch />
           {token && (
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -165,14 +172,21 @@ export const Navbar = () => {
 
       {token && !mobileMenuOpen && (
         <div className="sm:hidden p-4 bg-gray-100 dark:bg-black">
-          <form onSubmit={handleSearch}>
+          <form onSubmit={handleSearch} className="w-full flex gap-2">
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar produto por ID..."
               radius="full"
-              className="w-full"
+              className="flex-1"
             />
+            <Button
+              type="submit"
+              size="sm"
+              className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white mt-1"
+            >
+              <Search size={16} />
+            </Button>
           </form>
         </div>
       )}
