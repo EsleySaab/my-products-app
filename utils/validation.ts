@@ -10,6 +10,12 @@ export const productSchema = z.object({
     .refine((files) => files?.length > 0, "A thumbnail é obrigatória"),
 })
 
+export const updateProductSchema = z.object({
+  title: z.string().min(3, "Título muito curto").optional(),
+  description: z.string().min(5, "Descrição muito curta").optional(),
+  thumbnail: z.any().optional(),
+})
+
 export const loginSchema = z.object({
   email: z.email("Email inválido"),
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),

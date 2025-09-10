@@ -50,7 +50,11 @@ export default function ProductsPage() {
             <div className="flex gap-2 mt-2">
               <Button
                 size="sm"
-                onClick={() => router.push(`/products/${product.id}`)}
+                onClick={() =>
+                  router.push(
+                    `/products/[id]/edit `.replace("[id]", product.id)
+                  )
+                }
               >
                 Editar
               </Button>
