@@ -38,7 +38,7 @@ O projeto conta com autenticação, busca de produtos e uma interface responsiva
 ### 1️⃣ Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/myproductsapp.git
+git clone https://github.com/EsleySaab/myproductsapp.git
 cd myproductsapp
 ```
 

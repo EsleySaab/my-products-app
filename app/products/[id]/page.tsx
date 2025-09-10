@@ -9,6 +9,7 @@ import api from "@/lib/api"
 import { ArrowLeft } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
+import { useToastStore } from "@/stores/toastStore"
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -17,6 +18,8 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState("")
+  const { addToast } = useToastStore()
+  
 
   const { authenticated, loading: authLoading } = useAuth()
   const user = useAuthStore((state) => state.user)
@@ -53,6 +56,7 @@ export default function ProductDetailPage() {
     try {
       await api.delete(`/products/${product.id}`)
       router.push("/products")
+      addToast("Produto deletado com sucesso!", "danger")
     } catch (err) {
       console.error(err)
     }

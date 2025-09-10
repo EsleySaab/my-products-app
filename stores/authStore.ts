@@ -12,6 +12,7 @@ interface AuthState {
   user: User | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
+  refreshSession: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -26,7 +27,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     const { token, user } = response.data
 
     set({ token, user })
-
     localStorage.setItem("token", token)
     localStorage.setItem("user", JSON.stringify(user))
   },
@@ -35,5 +35,20 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ token: null, user: null })
     localStorage.removeItem("token")
     localStorage.removeItem("user")
+  },
+
+  refreshSession: async () => {
+    try {
+      const response = await api.post("/auth/session")
+      const { token, user } = response.data
+
+      set({ token, user })
+      localStorage.setItem("token", token)
+      localStorage.setItem("user", JSON.stringify(user))
+    } catch (err) {
+      set({ token: null, user: null })
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+    }
   },
 }))
