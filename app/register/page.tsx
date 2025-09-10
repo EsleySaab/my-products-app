@@ -72,34 +72,75 @@ export default function RegisterPage() {
 
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
-        <Input label="Nome" {...register("name")} className="mb-4" />
+        {/* Nome */}
+        <Input label="Nome" {...register("name")} className="mb-1" />
+        {errors.name && (
+          <p className="text-red-500 text-sm mb-2">{errors.name.message}</p>
+        )}
+
+        {/* Email */}
         <Input
           label="Email"
           type="email"
           {...register("email")}
-          className="mb-4"
+          className="mb-1"
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
+        )}
+
+        {/* Senha */}
         <Input
           label="Senha"
           type="password"
           {...register("password")}
-          className="mb-4"
+          className="mb-1"
         />
+        {errors.password && (
+          <p className="text-red-500 text-sm mb-2">{errors.password.message}</p>
+        )}
+
+        {/* Confirmar Senha */}
         <Input
           label="Confirmar Senha"
           type="password"
           {...register("verifyPassword")}
-          className="mb-4"
+          className="mb-1"
         />
+        {errors.verifyPassword && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.verifyPassword.message}
+          </p>
+        )}
+
+        {/* País */}
         <Input
           label="País (ex: BR)"
           {...register("phone.country")}
-          className="mb-4"
+          className="mb-1"
         />
-        <Input label="DDD" {...register("phone.ddd")} className="mb-4" />
-        <Input label="Número" {...register("phone.number")} className="mb-6" />
+        {errors.phone?.country && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.phone.country.message}
+          </p>
+        )}
 
-        <Button type="submit" className="w-full mb-4">
+        {/* DDD */}
+        <Input label="DDD" {...register("phone.ddd")} className="mb-1" />
+        {errors.phone?.ddd && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.phone.ddd.message}
+          </p>
+        )}
+
+        <Input label="Número" {...register("phone.number")} className="mb-1" />
+        {errors.phone?.number && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.phone.number.message}
+          </p>
+        )}
+
+        <Button type="submit" className="w-full mt-4 mb-4">
           Registrar
         </Button>
 

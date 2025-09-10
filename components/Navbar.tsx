@@ -209,7 +209,9 @@ export const Navbar = () => {
               router.push("/products/create")
               setMobileMenuOpen(false)
             }}
+            className="flex items-center gap-2"
           >
+            <span className="text-lg font-bold">+</span>
             Criar Produto
           </Button>
           <Button

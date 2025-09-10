@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site"
 import { fontSans } from "@/config/fonts"
 import { Navbar } from "@/components/Navbar"
 import { ToastContainer } from "@/components/ToastContainer"
+import { Footer } from "@/components/Footer"
 
 export const metadata: Metadata = {
   title: {
@@ -48,6 +49,7 @@ export default function RootLayout({
               {children}
               <ToastContainer />
             </main>
+            <Footer />
           </div>
         </Providers>
       </body>
