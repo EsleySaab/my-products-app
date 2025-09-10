@@ -9,6 +9,7 @@ import { Button } from "@heroui/button"
 import { useProductStore } from "@/stores/productStore"
 import { productSchema } from "@/utils/validation"
 import { useToastStore } from "@/stores/toastStore"
+import { ArrowLeft } from "lucide-react"
 
 type ProductFormData = {
   title: string
@@ -30,11 +31,11 @@ export default function CreateProductPage() {
       const formData = new FormData()
       formData.append("title", data.title)
       formData.append("description", data.description)
-      formData.append("thumbnail", data.thumbnail[0]) 
+      formData.append("thumbnail", data.thumbnail[0])
 
-      await createProduct(formData) 
+      await createProduct(formData)
 
-       addToast("Produto criado com sucesso!", "success")
+      addToast("Produto criado com sucesso!", "success")
 
       router.push("/products")
     } catch (err: any) {
@@ -45,7 +46,15 @@ export default function CreateProductPage() {
   const { addToast } = useToastStore()
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
+      <Button
+        variant="ghost"
+        startContent={<ArrowLeft className="w-4 h-4" />}
+        onClick={() => router.push("/products")}
+        className="mb-4"
+      >
+        Voltar
+      </Button>
       <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
         Criar Produto
       </h1>

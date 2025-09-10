@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Button } from "@heroui/button"
 import ConfirmDeleteModal from "@/components/confirmDeleteModal"
 import api from "@/lib/api"
+import { ArrowLeft } from "lucide-react"
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -47,6 +48,14 @@ export default function ProductDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-gray-100 dark:bg-gray-950 h-full space-y-6 rounded-lg">
+      <Button
+        variant="ghost"
+        startContent={<ArrowLeft className="w-4 h-4" />}
+        onClick={() => router.back()}
+        className="mb-4"
+      >
+        Voltar
+      </Button>
       <div className="bg-gray-100 dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
         {product.thumbnail && (
           <div className="w-full h-64 md:h-[550px] overflow-hidden rounded-t-xl">

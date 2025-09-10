@@ -30,7 +30,6 @@ export const Navbar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (search.trim()) {
-      // Aqui assumo que a busca é por ID, já que sua rota é GET /products/{id}
       router.push(`/products/${search.trim()}`)
       setSearch("")
     }
@@ -112,7 +111,7 @@ export const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                   <button
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    onClick={() => router.push("/profile")}
+                    onClick={() => router.push("#")}
                   >
                     Perfil
                   </button>
