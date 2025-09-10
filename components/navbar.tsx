@@ -88,6 +88,16 @@ export const Navbar = () => {
               <NavbarItem>
                 <Button
                   size="sm"
+                  onClick={() => router.push("/dashboard")}
+                  className="flex items-center gap-2 bg-blue-700 dark:bg-blue-700 text-text-gray-100 dark:text-gray-100 hover:bg-blue-600 dark:hover:bg-blue-600"
+                >
+                  Dashboard
+                </Button>
+              </NavbarItem>
+
+              <NavbarItem>
+                <Button
+                  size="sm"
                   onClick={() => router.push("/products/create")}
                   className="flex items-center gap-2"
                 >
@@ -164,6 +174,16 @@ export const Navbar = () => {
 
       {token && mobileMenuOpen && (
         <div className="sm:hidden p-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-950 flex flex-col gap-2">
+          <Button
+            size="sm"
+            onClick={() => {
+              router.push("/dashboard")
+              setMobileMenuOpen(false)
+            }}
+            className="bg-blue-700 dark:bg-blue-700 text-gray-100 dark:text-gray-100 hover:bg-blue-600 dark:hover:bg-blue-600"
+          >
+            Dashboard
+          </Button>
           <Button
             size="sm"
             onClick={() => {
