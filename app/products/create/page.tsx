@@ -8,6 +8,7 @@ import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
 import { useProductStore } from "@/stores/productStore"
 import { productSchema } from "@/utils/validation"
+import { useToastStore } from "@/stores/toastStore"
 
 type ProductFormData = {
   title: string
@@ -32,11 +33,16 @@ export default function CreateProductPage() {
       formData.append("thumbnail", data.thumbnail[0]) 
 
       await createProduct(formData) 
+
+       addToast("Produto criado com sucesso!", "success")
+
       router.push("/products")
     } catch (err: any) {
       setError(err.response?.data?.message || "Erro ao criar produto")
     }
   }
+
+  const { addToast } = useToastStore()
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">

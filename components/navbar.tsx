@@ -9,20 +9,31 @@ import {
 import { ThemeSwitch } from "@/components/theme-switch"
 import { useAuthStore } from "@/stores/authStore"
 import { Button } from "@heroui/button"
+import { Input } from "@heroui/input"
 import { Avatar, AvatarIcon } from "@heroui/avatar"
 import NextLink from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
 
 export const Navbar = () => {
-  const { token, user, logout } = useAuthStore()
+  const { token, logout } = useAuthStore()
   const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [search, setSearch] = useState("")
   const menuRef = useRef<HTMLDivElement>(null)
 
   const handleLogout = () => {
     logout()
     router.push("/login")
+  }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (search.trim()) {
+      // Aqui assumo que a busca é por ID, já que sua rota é GET /products/{id}
+      router.push(`/products/${search.trim()}`)
+      setSearch("")
+    }
   }
 
   useEffect(() => {
@@ -44,6 +55,20 @@ export const Navbar = () => {
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
+
+      {token && (
+        <NavbarContent justify="center" className="flex-1 max-w-md">
+          <form onSubmit={handleSearch} className="w-full">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar produto por ID..."
+              radius="full"
+              className="w-full"
+            />
+          </form>
+        </NavbarContent>
+      )}
 
       <NavbarContent justify="end" className="gap-2 items-center">
         <ThemeSwitch />

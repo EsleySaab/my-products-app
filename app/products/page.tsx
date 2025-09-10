@@ -5,7 +5,9 @@ import { useProductStore } from "@/stores/productStore"
 import { Avatar } from "@heroui/avatar"
 import { Button } from "@heroui/button"
 import { useRouter } from "next/navigation"
-import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
+import ConfirmDeleteModal from "@/components/confirmDeleteModal"
+import { useToastStore } from "@/stores/toastStore"
+import { Eye } from "lucide-react"
 
 export default function ProductsPage() {
   const { products, fetchProducts, deleteProduct } = useProductStore()
@@ -27,8 +29,12 @@ export default function ProductsPage() {
       await deleteProduct(selectedId)
       setIsModalOpen(false)
       setSelectedId(null)
+
+      addToast("Produto deletado com sucesso!", "danger")
     }
   }
+
+  const { addToast } = useToastStore()
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-950 h-full">
@@ -57,30 +63,42 @@ export default function ProductsPage() {
               {product.description}
             </p>
 
-            <div className="flex gap-2 mt-2">
-              <Button
-                size="sm"
-                onClick={() =>
-                  router.push(
-                    `/products/[id]/edit `.replace("[id]", product.id)
-                  )
-                }
-              >
-                Editar
-              </Button>
-              <Button
-                size="sm"
-                color="danger"
-                onClick={() => handleOpenModal(product.id)}
-              >
-                Deletar
-              </Button>
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    router.push(
+                      `/products/[id]/edit`.replace("[id]", product.id)
+                    )
+                  }
+                  className="bg-blue-600 hover:bg-blue-700 text-gray-100"
+                >
+                  Editar
+                </Button>
+                <Button
+                  size="sm"
+                  color="danger"
+                  onClick={() => handleOpenModal(product.id)}
+                >
+                  Deletar
+                </Button>
 
-              <ConfirmDeleteModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={handleConfirmDelete}
-              />
+                <ConfirmDeleteModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  onConfirm={handleConfirmDelete}
+                />
+              </div>
+
+              <Button
+                size="sm"
+                className="flex items-center gap-1"
+                onClick={() => router.push(`/products/${product.id}`)}
+              >
+                <Eye size={16} />
+                Ver Detalhes
+              </Button>
             </div>
           </div>
         ))}

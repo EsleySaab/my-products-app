@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
+import { ArrowLeft } from "lucide-react"
 import { updateProductSchema } from "@/utils/validation"
+import { useToastStore } from "@/stores/toastStore"
 import api from "@/lib/api"
 
 type ProductFormData = {
@@ -75,6 +77,7 @@ export default function EditProductPage() {
           headers: { "Content-Type": "multipart/form-data" },
         })
       }
+      addToast("Produto atualizado com sucesso!", "info")
 
       router.push("/products")
     } catch (err: any) {
@@ -82,10 +85,21 @@ export default function EditProductPage() {
     }
   }
 
+  const { addToast } = useToastStore()
+
   if (loading) return <p>Carregando...</p>
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6 bg-gray-50 dark:bg-gray-950 h-full">
+      <Button
+        variant="ghost"
+        startContent={<ArrowLeft className="w-4 h-4" />}
+        onClick={() => router.back()}
+        className="mb-4"
+      >
+        Voltar
+      </Button>
+
       <h1 className="text-2xl font-bold mb-6">Editar Produto</h1>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
