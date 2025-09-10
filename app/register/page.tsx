@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
+import { useToastStore } from "@/stores/toastStore"
 
 type RegisterFormData = {
   name: string
@@ -37,18 +38,20 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await api.post("/users", data)
-      setSuccess("Usuário criado com sucesso! Você já pode fazer login.")
+      addToast("Usuário criado com sucesso! Você já pode fazer login.", "success")
       setTimeout(() => router.push("/login"), 1500)
     } catch (err: any) {
       setError(err.response?.data?.message || "Erro ao criar usuário")
     }
   }
 
+  const { addToast } = useToastStore()
+
   return (
     <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-950">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md"
+        className="bg-white dark:bg-gray-950 p-8 rounded-lg shadow-md w-full max-w-md"
       >
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
           Criar Conta

@@ -80,12 +80,12 @@ export default function ProductDetailPage() {
               as="a"
               href={`/products/${product.id}/edit`}
               color="primary"
-              className="flex-1"
+              className="flex-1 p-1.5"
             >
               Editar
             </Button>
 
-            <Button onClick={handleOpenModal} color="danger" className="flex-1">
+            <Button onClick={handleOpenModal} color="danger" className="flex-1 p-1.5">
               Deletar
             </Button>
           </div>

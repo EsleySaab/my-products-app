@@ -46,7 +46,7 @@ export default function CreateProductPage() {
   const { addToast } = useToastStore()
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md ">
       <Button
         variant="ghost"
         startContent={<ArrowLeft className="w-4 h-4" />}

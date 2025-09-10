@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
+import { useToastStore } from "@/stores/toastStore"
 
 type LoginFormData = {
   email: string
@@ -31,16 +32,19 @@ export default function LoginPage() {
     try {
       await login(data.email, data.password)
       router.push("/dashboard")
+      addToast("Login realizado com sucesso!", "success")
     } catch (err: any) {
       setError(err.response?.data?.message || "Erro ao fazer login")
     }
   }
 
+  const { addToast } = useToastStore()
+
   return (
     <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-950">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md"
+        className="bg-white dark:bg-gray-950 p-8 rounded-lg shadow-md w-full max-w-md"
       >
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
           Login

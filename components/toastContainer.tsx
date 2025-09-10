@@ -19,7 +19,7 @@ export const ToastContainer = () => {
       {toasts.map((toast) => (
         <Alert
           key={toast.id}
-          variant={toast.variant}
+          variant="solid"
           className={`
             min-w-[250px] 
             ${toast.variant === "success" ? "bg-green-500 text-white" : ""}

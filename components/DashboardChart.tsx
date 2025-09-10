@@ -28,7 +28,6 @@ export default function DashboardChart() {
 
   useEffect(() => {
     if (!chartRef.current) return
-
     const ctx = chartRef.current.getContext("2d")
     if (!ctx) return
 
@@ -47,9 +46,13 @@ export default function DashboardChart() {
 
     const options = {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { position: "top" as const },
         title: { display: true, text: "Métricas de Vendas Mensais" },
+      },
+      scales: {
+        y: { beginAtZero: true },
       },
     }
 
@@ -64,5 +67,10 @@ export default function DashboardChart() {
     }
   }, [])
 
-  return <canvas ref={chartRef}></canvas>
+  return (
+    <div className="w-full h-64 sm:h-80 md:h-96">
+      {" "}
+      <canvas ref={chartRef}></canvas>
+    </div>
+  )
 }
