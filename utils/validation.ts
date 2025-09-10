@@ -1,20 +1,24 @@
 import { z } from "zod"
 
 export const productSchema = z.object({
-  title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
-  description: z.string().min(5, "Descrição deve ter pelo menos 5 caracteres"),
-  thumbnail: z.url("Thumbnail deve ser uma URL válida"),
+  title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
+  description: z
+    .string()
+    .min(5, "A descrição deve ter pelo menos 5 caracteres"),
+  thumbnail: z
+    .any()
+    .refine((files) => files?.length > 0, "A thumbnail é obrigatória"),
 })
 
 export const loginSchema = z.object({
-  email: z.string().email("Email inválido"),
+  email: z.email("Email inválido"),
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
 })
 
 export const registerSchema = z
   .object({
     name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-    email: z.string().email("Email inválido"),
+    email: z.email("Email inválido"),
     password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
     verifyPassword: z.string().min(6, "Confirmação obrigatória"),
     phone: z.object({

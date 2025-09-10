@@ -37,7 +37,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-900">
+    <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-950">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md"
@@ -49,19 +49,11 @@ export default function LoginPage() {
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
         <div className="mb-4">
-          <Input
-            label="Email"
-            type="email"
-            {...register("email")}
-          />
+          <Input label="Email" type="email" {...register("email")} />
         </div>
 
         <div className="mb-6">
-          <Input
-            label="Senha"
-            type="password"
-            {...register("password")}
-          />
+          <Input label="Senha" type="password" {...register("password")} />
         </div>
 
         <Button type="submit" className="w-full">

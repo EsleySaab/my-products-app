@@ -5,9 +5,7 @@ import api from "@/lib/api"
 interface ProductState {
   products: Product[]
   fetchProducts: () => Promise<void>
-  createProduct: (
-    data: Omit<Product, "id" | "createdAt" | "updatedAt">
-  ) => Promise<void>
+  createProduct: (data: FormData) => Promise<void>
   updateProduct: (id: string, data: Partial<Product>) => Promise<void>
   deleteProduct: (id: string) => Promise<void>
 }
@@ -17,18 +15,32 @@ export const useProductStore = create<ProductState>((set, get) => ({
 
   fetchProducts: async () => {
     const response = await api.get("/products")
-    set({ products: response.data.data })
+    const products = response.data.data.map((p: any) => ({
+      ...p,
+      thumbnail: p.thumbnail?.url || "",
+    }))
+    set({ products })
   },
 
-  createProduct: async (data) => {
-    const response = await api.post("/products", data)
-    set({ products: [...get().products, response.data] })
+  createProduct: async (data: FormData) => {
+    const response = await api.post("/products", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    const newProduct = {
+      ...response.data,
+      thumbnail: response.data.thumbnail?.url || "",
+    }
+    set({ products: [...get().products, newProduct] })
   },
 
-  updateProduct: async (id, data) => {
+  updateProduct: async (id: string, data: Partial<Product>) => {
     const response = await api.put(`/products/${id}`, data)
+    const updatedProduct = {
+      ...response.data,
+      thumbnail: response.data.thumbnail?.url || "",
+    }
     set({
-      products: get().products.map((p) => (p.id === id ? response.data : p)),
+      products: get().products.map((p) => (p.id === id ? updatedProduct : p)),
     })
   },
 

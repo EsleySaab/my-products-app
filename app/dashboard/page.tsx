@@ -14,7 +14,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-100 dark:bg-gray-950">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <p>Bem-vindo! 🎉</p>
     </div>

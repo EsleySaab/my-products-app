@@ -3,4 +3,7 @@ export interface Product {
   title: string
   description: string
   thumbnail: string
+  status?: boolean
+  createdAt?: string
+  updatedAt?: string
 }

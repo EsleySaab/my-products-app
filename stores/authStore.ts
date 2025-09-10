@@ -9,14 +9,17 @@ interface User {
 
 interface AuthState {
   token: string | null
-  user: any | null
+  user: User | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
-  user: null,
+  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  user:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "null")
+      : null,
 
   login: async (email, password) => {
     const response = await api.post("/auth/login", { email, password })
