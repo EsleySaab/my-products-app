@@ -1,22 +1,32 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useProductStore } from "@/stores/productStore"
 import { Avatar } from "@heroui/avatar"
 import { Button } from "@heroui/button"
 import { useRouter } from "next/navigation"
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal"
 
 export default function ProductsPage() {
   const { products, fetchProducts, deleteProduct } = useProductStore()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     fetchProducts()
   }, [fetchProducts])
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Deseja realmente deletar este produto?")) {
-      await deleteProduct(id)
+  const handleOpenModal = (id: string) => {
+    setSelectedId(id)
+    setIsModalOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (selectedId) {
+      await deleteProduct(selectedId)
+      setIsModalOpen(false)
+      setSelectedId(null)
     }
   }
 
@@ -61,10 +71,16 @@ export default function ProductsPage() {
               <Button
                 size="sm"
                 color="danger"
-                onClick={() => handleDelete(product.id)}
+                onClick={() => handleOpenModal(product.id)}
               >
                 Deletar
               </Button>
+
+              <ConfirmDeleteModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+              />
             </div>
           </div>
         ))}
