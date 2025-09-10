@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
-import DashboardChart from "@/components/DashboardChart"
+import DashboardChart from "@/app/dashboard/components/DashboardChart"
 
 export default function DashboardPage() {
   const { authenticated, loading } = useAuth()

@@ -6,7 +6,7 @@ import {
   NavbarBrand,
   NavbarItem,
 } from "@heroui/navbar"
-import { ThemeSwitch } from "@/components/theme-switch"
+import { ThemeSwitch } from "@/components/ThemeSwitch"
 import { useAuthStore } from "@/stores/authStore"
 import { Button } from "@heroui/button"
 import { Input } from "@heroui/input"

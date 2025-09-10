@@ -28,7 +28,6 @@ export default function CreateProductPage() {
   const { authenticated, loading } = useAuth()
   const user = useAuthStore((state) => state.user)
 
-  // Protege a rota
   useEffect(() => {
     if (!loading && !authenticated) {
       router.push("/login")
