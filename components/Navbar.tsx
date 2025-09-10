@@ -53,6 +53,7 @@ export const Navbar = () => {
   return (
     <>
       <HeroUINavbar maxWidth="xl" position="sticky" className="px-4">
+        {/* Logo */}
         <NavbarContent justify="start">
           <NavbarBrand as="li" className="gap-3 max-w-fit">
             <NextLink href="/" className="text-xl font-bold">
@@ -61,6 +62,7 @@ export const Navbar = () => {
           </NavbarBrand>
         </NavbarContent>
 
+        {/* Busca (Desktop, apenas se logado) */}
         {token && (
           <NavbarContent
             justify="center"
@@ -78,11 +80,14 @@ export const Navbar = () => {
           </NavbarContent>
         )}
 
+        {/* Menu Desktop */}
         <NavbarContent
           justify="end"
           className="gap-2 items-center hidden sm:flex"
         >
+          {/* ThemeSwitch sempre visível */}
           <ThemeSwitch />
+
           {token && (
             <>
               <NavbarItem>
@@ -116,6 +121,7 @@ export const Navbar = () => {
                 </Button>
               </NavbarItem>
 
+              {/* Avatar e menu */}
               <div className="relative" ref={menuRef}>
                 <NavbarItem>
                   <div
@@ -149,15 +155,21 @@ export const Navbar = () => {
           )}
         </NavbarContent>
 
-        {token && (
-          <NavbarContent justify="end" className="sm:hidden">
+        {/* Menu Mobile */}
+        <NavbarContent
+          justify="end"
+          className="sm:hidden flex items-center gap-2"
+        >
+          <ThemeSwitch /> {/* Sempre visível */}
+          {token && (
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-          </NavbarContent>
-        )}
+          )}
+        </NavbarContent>
       </HeroUINavbar>
 
+      {/* Busca Mobile (quando menu fechado) */}
       {token && !mobileMenuOpen && (
         <div className="sm:hidden p-4 bg-gray-100 dark:bg-black">
           <form onSubmit={handleSearch}>
@@ -172,6 +184,7 @@ export const Navbar = () => {
         </div>
       )}
 
+      {/* Menu Mobile (quando aberto) */}
       {token && mobileMenuOpen && (
         <div className="sm:hidden p-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-950 flex flex-col gap-2">
           <Button
